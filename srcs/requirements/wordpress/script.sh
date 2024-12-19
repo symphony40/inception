@@ -1,4 +1,15 @@
 #!/bin/bash
+ROOT_ENV_FILE="$(dirname "$0")/../../.env"
+
+# Load environment variables from .env file
+if [ -f "$ROOT_ENV_FILE" ]; then
+    set -o allexport
+    source "$ROOT_ENV_FILE"
+    set +o allexport
+else
+    echo "Root .env file not found at $ROOT_ENV_FILE!"
+    exit 1
+fi
 cd /var/www/html
 curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 chmod +x wp-cli.phar
