@@ -1,0 +1,50 @@
+services:
+  nginx:
+    build: requirements/nginx/.
+    restart: always
+    container_name: nginx
+    depends_on:
+      - wordpress
+      - mariadb
+    ports:
+      - "443:443"
+    volumes:
+      - ./web:/var/www/html
+    networks:
+      inception:
+  wordpress:
+    build: requirements/wordpress/.
+    restart: always
+    container_name: wp-php
+    secrets:
+      - db_user_password
+    environment:
+      WORDPRESS_DB_PASSWORD_FILE: /run/secrets/db_user_password
+    depends_on:
+      - mariadb
+    volumes:
+      - ./web:/var/www/html
+    networks:
+      inception:
+  mariadb:
+    build: requirements/mariadb/.
+    restart: always
+    container_name: mariadb
+    secrets:
+      - db_root_password
+      - db_user_password
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MYSQL_PASSWORD_FILE: /run/secrets/db_user_password
+    volumes:
+      - ./database:/var/lib/mysql
+    networks:
+      inception:
+networks:
+  inception:
+    name: inception
+secrets:
+  db_root_password:
+    file: ../secrets/db_root_password.txt
+  db_user_password:
+    file: ../secrets/db_user_password.txt
