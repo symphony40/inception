@@ -2,6 +2,7 @@ services:
   nginx:
     build: requirements/nginx/.
     restart: always
+    image: nginx
     container_name: nginx
     env_file:
       - /home/vejurick/Desktop/.env
@@ -16,6 +17,7 @@ services:
       inception:
   wordpress:
     build: requirements/wordpress/.
+    image: wordpress
     env_file:
       - /home/vejurick/Desktop/.env
     restart: always
@@ -33,6 +35,7 @@ services:
   mariadb:
     build: requirements/mariadb/.
     restart: always
+    image: mariadb
     env_file:
       - /home/vejurick/Desktop/.env
     container_name: mariadb
