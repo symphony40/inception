@@ -3,17 +3,21 @@ services:
     build: requirements/nginx/.
     restart: always
     container_name: nginx
+    env_file:
+      - /home/vejurick/Desktop/.env
     depends_on:
       - wordpress
       - mariadb
     ports:
       - "443:443"
     volumes:
-      - ./web:/var/www/html
+      - /home/vejurick/data/web:/var/www/html
     networks:
       inception:
   wordpress:
     build: requirements/wordpress/.
+    env_file:
+      - /home/vejurick/Desktop/.env
     restart: always
     container_name: wp-php
     secrets:
@@ -23,12 +27,14 @@ services:
     depends_on:
       - mariadb
     volumes:
-      - ./web:/var/www/html
+      - /home/vejurick/data/web:/var/www/html
     networks:
       inception:
   mariadb:
     build: requirements/mariadb/.
     restart: always
+    env_file:
+      - /home/vejurick/Desktop/.env
     container_name: mariadb
     secrets:
       - db_root_password
@@ -37,7 +43,7 @@ services:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
       MYSQL_PASSWORD_FILE: /run/secrets/db_user_password
     volumes:
-      - ./database:/var/lib/mysql
+      - /home/vejurick/data/database:/var/lib/mysql
     networks:
       inception:
 networks:
