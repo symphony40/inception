@@ -12,7 +12,7 @@ services:
     ports:
       - "443:443"
     volumes:
-      - /home/vejurick/data/web:/var/www/html
+      - web_data:/var/www/html
     networks:
       inception:
   wordpress:
@@ -29,7 +29,7 @@ services:
     depends_on:
       - mariadb
     volumes:
-      - /home/vejurick/data/web:/var/www/html
+      - web_data:/var/www/html
     networks:
       inception:
   mariadb:
@@ -46,7 +46,7 @@ services:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
       MYSQL_PASSWORD_FILE: /run/secrets/db_user_password
     volumes:
-      - /home/vejurick/data/database:/var/lib/mysql
+      - db_data:/var/lib/mysql
     networks:
       inception:
 networks:
@@ -57,3 +57,16 @@ secrets:
     file: ../secrets/db_root_password.txt
   db_user_password:
     file: ../secrets/db_user_password.txt
+volumes:
+  web_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/vejurick/data/web
+      o: bind
+  db_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/vejurick/data/database
+      o: bind
